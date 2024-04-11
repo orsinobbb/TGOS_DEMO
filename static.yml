@@ -1,5 +1,6 @@
+
 # Simple workflow for deploying static content to GitHub Pages
-name: Deploy static content to Pages
+name: Deploy Report to Pages
 
 on:
   # Runs on pushes targeting the default branch
@@ -31,13 +32,32 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+      
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+          cache: ''
+      - run: npm i
+      - run: npx playwright install --with-deps
+      - run: npm run test
+
+      - name: Coveralls
+        uses: coverallsapp/github-action@v2
+      
+      - name: Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./report/coverage/codecov.json
+
       - name: Setup Pages
         uses: actions/configure-pages@v3
+
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v2
+        uses: actions/upload-pages-artifact@v1
         with:
-          # Upload entire repository
-          path: '.'
+          path: './report'
+          
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v2
