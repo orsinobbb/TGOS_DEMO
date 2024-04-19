@@ -1,88 +1,365 @@
 <!DOCTYPE html>
 <html>
 <head>
-        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-        <title>TGOS MAP API for Web 點擊及隱藏地圖標記</title>
-        <script type="text/javascript" src="http://api.tgos.tw/TGOS_API/tgos?ver=2&AppID=x+JLVSx85Lk=&APIKey=in8W74q0ogpcfW/STwicK8D5QwCdddJf05/7nb+OtDh8R99YN3T0LurV4xato3TpL/fOfylvJ9Wv/khZEsXEWxsBmg+GEj4AuokiNXCh14Rei21U5GtJpIkO++Mq3AguFK/ISDEWn4hMzqgrkxNe1Q==" charset="utf-8"></script>
-        <!--下載後請將yourID及yourkey取代為您申請所取得的APPID及APIKEY方能正確顯示服務-->
-        <script type="text/javascript">
-            var pTGMarker; //Marker物件
-            var ls = [];
-            var markerPoint; //Marker位置
-            var markerTitle; //Marker標題
-            var markerImg; //Marker圖片
-            var pMap;
-            function InitWnd() {
-                var pOMap = document.getElementById("TGMap");
-                pMap = new TGOS.TGOnlineMap(pOMap, TGOS.TGCoordSys.EPSG3857); //宣告TGOnlineMap地圖物件並設定坐標系統
-                var sZoom = 12;
-                pMap.setZoom(sZoom);
-                //markerPoint = new TGOS.TGPoint(302430.958, 2770552.360);
-                //markerImg = new TGOS.TGImage("https://api.tgos.tw/TGOS_API/images/marker.png",
-                //    new TGOS.TGSize(38, 33), new TGOS.TGPoint(0, 0), new TGOS.TGPoint(10, 33));
-                //pTGMarker = new TGOS.TGMarker(pMap, markerPoint, "內政部", markerImg);
-                //加入Marker(地圖物件,Marker坐標,Marker標題,Marker圖案)
-                //pMap.setCenter(ls[0].value);
-                var linedata = JSON.parse("{\"coordinates\":[[121.49242222309111,25.09001026419077],[121.49361312389374,25.089058044216003],[121.49419248104094,25.088547923324462],[121.49516344070433,25.08757625860085],[121.49624705314635,25.086458834631447],[121.49691224098206,25.08591469404832],[121.49745941162108,25.085380267906537],[121.4978241920471,25.084549473543618],[121.49840891361237,25.083670088571605],[121.4991706609726,25.082392296938554],[121.49979829788207,25.081308835788576],[121.50071561336516,25.07967147944268],[121.50119304656982,25.078976689568417],[121.50157392024995,25.07826731961489],[121.5018153190613,25.077871333914956],[121.50254487991333,25.075842798128686],[121.50303304195404,25.074458029848145],[121.50361776351927,25.072626224591048],[121.50413274765015,25.07077009688698],[121.50454312562941,25.068780316183574],[121.50465041399002,25.06743191161828],[121.50476038455963,25.067130644425486],[121.50465846061707,25.065534401855647],[121.50457262992859,25.06471319133492],[121.50443315505983,25.063984301646116],[121.50416493415833,25.06314121383057],[121.50341928005217,25.061542489592156],[121.50326907634735,25.061309239327304],[121.50202989578247,25.058923257992024],[121.50177776813507,25.058529639498893],[121.50133252143861,25.058024250937844],[121.50014698505402,25.057134956390232],[121.49934232234953,25.05648863444565],[121.49685859680177,25.05445731471564],[121.49416029453279,25.05215381572384],[121.49158000946044,25.049971769371528]]}");
-                addpTGMarkerls(linedata);
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <title>TGOS MAP API for Web 點擊及隱藏地圖標記</title>
+    <script type="text/javascript" src="http://api.tgos.tw/TGOS_API/tgos?ver=2&AppID=x+JLVSx85Lk=&APIKey=in8W74q0ogpcfW/STwicK8D5QwCdddJf05/7nb+OtDh8R99YN3T0LurV4xato3TpL/fOfylvJ9Wv/khZEsXEWxsBmg+GEj4AuokiNXCh14Rei21U5GtJpIkO++Mq3AguFK/ISDEWn4hMzqgrkxNe1Q==" charset="utf-8"></script>
+    <!--下載後請將yourID及yourkey取代為您申請所取得的APPID及APIKEY方能正確顯示服務-->
+    <script type="text/javascript">
+        var pTGMarker; //Marker物件
+        var ls = [];
+        var markerPoint; //Marker位置
+        var markerTitle; //Marker標題
+        var markerImg; //Marker圖片
+        var markerImg2; //Marker圖片
+        var pMap;
+        var ls2 = [];//infowindow
+        function InitWnd() {
+            var pOMap = document.getElementById("TGMap");
+            pMap = new TGOS.TGOnlineMap(pOMap, TGOS.TGCoordSys.EPSG3857); //宣告TGOnlineMap地圖物件並設定坐標系統
+            var sZoom = 12;
+            pMap.setZoom(sZoom);
+            //markerPoint = new TGOS.TGPoint(302430.958, 2770552.360);
+            //markerImg = new TGOS.TGImage("https://api.tgos.tw/TGOS_API/images/marker.png",
+            //    new TGOS.TGSize(38, 33), new TGOS.TGPoint(0, 0), new TGOS.TGPoint(10, 33));
+            //pTGMarker = new TGOS.TGMarker(pMap, markerPoint, "內政部", markerImg);
+            //加入Marker(地圖物件,Marker坐標,Marker標題,Marker圖案)
+            //pMap.setCenter(ls[0].value);
+            var linedata = JSON.parse("{\"coordinates\":[[121.49242222309111,25.09001026419077],[121.49361312389374,25.089058044216003],[121.49419248104094,25.088547923324462],[121.49516344070433,25.08757625860085],[121.49624705314635,25.086458834631447],[121.49691224098206,25.08591469404832],[121.49745941162108,25.085380267906537],[121.4978241920471,25.084549473543618],[121.49840891361237,25.083670088571605],[121.4991706609726,25.082392296938554],[121.49979829788207,25.081308835788576],[121.50071561336516,25.07967147944268],[121.50119304656982,25.078976689568417],[121.50157392024995,25.07826731961489],[121.5018153190613,25.077871333914956],[121.50254487991333,25.075842798128686],[121.50303304195404,25.074458029848145],[121.50361776351927,25.072626224591048],[121.50413274765015,25.07077009688698],[121.50454312562941,25.068780316183574],[121.50465041399002,25.06743191161828],[121.50476038455963,25.067130644425486],[121.50465846061707,25.065534401855647],[121.50457262992859,25.06471319133492],[121.50443315505983,25.063984301646116],[121.50416493415833,25.06314121383057],[121.50341928005217,25.061542489592156],[121.50326907634735,25.061309239327304],[121.50202989578247,25.058923257992024],[121.50177776813507,25.058529639498893],[121.50133252143861,25.058024250937844],[121.50014698505402,25.057134956390232],[121.49934232234953,25.05648863444565],[121.49685859680177,25.05445731471564],[121.49416029453279,25.05215381572384],[121.49158000946044,25.049971769371528]]}");
+            addpTGMarkerls(linedata);
 
 
-                addpTGMarker(121.500522, 25.057305);
-                addpTGMarker(121.504744, 25.067748);
-                addpTGMarker(121.50123, 25.079195);
-                addpTGMarker(121.48956, 25.09228);
-
-            }
+            addpTGMarker(121.500522, 25.057305, '同安抽水站');
+            addpTGMarker(121.504744, 25.067748, '長元抽水站');
+            addpTGMarker(121.50123, 25.079195, '重陽抽水站');
+            addpTGMarker(121.48956, 25.09228, "溪美抽水站");
 
 
-            function addpTGMarker(x, y) {
-                markerPoint = new TGOS.TGPoint(x, y);
-                markerImg = new TGOS.TGImage("https://api.tgos.tw/TGOS_API/images/marker.png",
-                    new TGOS.TGSize(38, 33), new TGOS.TGPoint(0, 0), new TGOS.TGPoint(10, 33));
-                pTGMarker = new TGOS.TGMarker(pMap, markerPoint, "內政部", markerImg);
-                ls.push(pTGMarker);
-                pMap.setCenter(markerPoint);
-            }
-            function addpTGMarkerls(linedata) {
-                var path1 = [];
-                linedata.coordinates.forEach(
+
+            var infoContent = '<div class=\"InfoBlock\"> < div > <a href="sUrl"> stitle </a> </div ></div > ';
+
+            var infoWindowOptions = {
+                pixelOffset: new TGOS.TGSize(0, -31)
+            };
+
+            var infowindow = new TGOS.TGInfoWindow(infoContent, markerPoint, infoWindowOptions);
+
+
+            TGOS.TGEvent.addListener(marker, 'mouseover', function () {
+                for (i in allMarkers) {
+                    infowindows[i].close();
+                }
+                InfoWindowOpen(infowindow, marker, map);
+            });
+        }
+
+
+        function addpTGMarker(x, y, infos) {
+            markerPoint = new TGOS.TGPoint(x, y);
+            markerImg = new TGOS.TGImage("https://api.tgos.tw/TGOS_API/images/marker.png",
+                new TGOS.TGSize(38, 33), new TGOS.TGPoint(0, 0), new TGOS.TGPoint(10, 33));
+            //markerImg2 = new TGOS.TGImage("https://api.tgos.tw/TGOS_API/images/marker2.png",
+            //    new TGOS.TGSize(38, 33), new TGOS.TGPoint(0, 0), new TGOS.TGPoint(10, 33));
+            pTGMarker = new TGOS.TGMarker(pMap, markerPoint, infos, markerImg);
+            pTGMarker.setClickable(true);
+            /*
+            TGOS.TGEvent.addListener(pTGMarker, 'mouseover', function () {
+                pTGMarker = this;
+                this.setIcon(markerImg2);
+            });
+            TGOS.TGEvent.addListener(pTGMarker, 'mouseout', function () {
+                pTGMarker.setIcon(markerImg);
+            });
+            */
+            var infoContent = infos;
+            //var infoContent = '三重光纖';
+            var infoWindowOptions = { pixelOffset: new TGOS.TGSize(5, 5) };
+            var infowindow = new TGOS.TGInfoWindow(infoContent, markerPoint, infoWindowOptions);
+            ls2.push(infowindow);
+            TGOS.TGEvent.addListener(pTGMarker, 'click', function () {
+                ls2.forEach(
                     function (value) {
-                        var p = new TGOS.TGPoint(value[0], value[1])
-                        path1.push(p)
+                        value.close();
                     }
                 )
-                //var p1 = new TGOS.TGPoint(121.49242222309111,25.09001026419077);
-                //var p2 = new TGOS.TGPoint(121.49516344070433,25.08757625860085);
-                //var p3 = new TGOS.TGPoint(121.50133252143861,25.058024250937844);
-                //var path1 = [p1, p2, p3];
-                var s1 = new TGOS.TGLineString(path1);  //定義要繪出的折線path
-                line = new TGOS.TGLine(pMap, s1, {  //繪出path為s1的線圖徵
-                    strokeColor: '#00AA88',
-                    strokeWeight: 3
-                });
-            }
+                infowindow.open(pMap, markerPoint);
+            });
+            ls.push(pTGMarker);
+            pMap.setCenter(markerPoint);
+        }
+        function addpTGMarkerls(linedata) {
+            var path1 = [];
+            linedata.coordinates.forEach(
+                function (value) {
+                    var p = new TGOS.TGPoint(value[0], value[1])
+                    path1.push(p)
+                }
+            )
+            //var p1 = new TGOS.TGPoint(121.49242222309111,25.09001026419077);
+            //var p2 = new TGOS.TGPoint(121.49516344070433,25.08757625860085);
+            //var p3 = new TGOS.TGPoint(121.50133252143861,25.058024250937844);
+            //var path1 = [p1, p2, p3];
+            var s1 = new TGOS.TGLineString(path1);  //定義要繪出的折線path
+            line = new TGOS.TGLine(pMap, s1, {  //繪出path為s1的線圖徵
+                strokeColor: '#00AA88',
+                strokeWeight: 3,
+                clickable: true
+            });
+            //var infoContent = '<div class=\"InfoBlock\"> < div > <a href="sUrl"> stitle </a> </div ></div > ';
+            //var infoWindowOptions = {   pixelOffset: new TGOS.TGSize(5, 5)};
+            //var infowindow = new TGOS.TGInfoWindow(infoContent,line.startPoint(), infoWindowOptions);
+            TGOS.TGEvent.addListener(line, 'mouseover', function () {
+                line.setStrokeWeight(5);
+                line.setStrokeColor('#AA8800');
 
-            function clcikableMarker() {
-                line.setVisible(document.getElementById("clickable").checked);
-            }
-            function visibleMarker() {
-                pTGMarker.setVisible(document.getElementById("visible").checked);
-                ls.forEach(
+            });
+            TGOS.TGEvent.addListener(line, 'mouseout', function () {
+                line.setStrokeColor('#00AA88');
+                line.setStrokeWeight(3);
+            });
+            var infoContent = '<div class=\"InfoBlock\"> <div> <a href="sUrl"> 三重光纖 </a> </div ></div > ';
+            //var infoContent = '三重光纖';
+            var infoWindowOptions = { pixelOffset: new TGOS.TGSize(5, 5) };
+            var infowindow = new TGOS.TGInfoWindow(infoContent, s1.startPoint(), infoWindowOptions);
+            ls2.push(infowindow);
+            TGOS.TGEvent.addListener(line, 'click', function () {
+                ls2.forEach(
                     function (value) {
-                        value.setVisible(document.getElementById("visible").checked);
+                        value.close();
                     }
                 )
+                infowindow.open(pMap, s1.startPoint());
+            });
+        }
+
+        function clcikableMarker() {
+            line.setVisible(document.getElementById("clickable").checked);
+        }
+        function visibleMarker(id) {
+            //pTGMarker.setVisible(document.getElementById("visible").checked);
+            ls.forEach(
+                function (value) {
+                    if (value.getTitle() == id)
+                        value.setVisible(document.getElementById(id).checked);
+                    if (id == "option22") {
+                        value.setVisible(document.getElementById(id).checked);
+                        //document.getElementById(value.getTitle()).checked = document.getElementById(id).checked;
+                    }
+                }
+            )
+            if (id == "option11") {
+                line.setVisible(document.getElementById(id).checked);
             }
-            function getStatus() {
-                alert("可點選狀態:" + pTGMarker.getClickable() + "\n顯示狀態:" + pTGMarker.getVisible());
+            if (id == "option1") {
+                if (!(document.getElementById("option15").style.height == "1px")) {
+                    document.getElementById("option15").style.visibility = 'hidden';
+                    document.getElementById("option15").style.height = "1px";
+                } else {
+                    document.getElementById("option15").style.visibility = 'visible';
+                    document.getElementById("option15").style.height = document.getElementById("option1").style.height;
+                    //document.getElementById("option1")
+                }
+
+                //document.getElementById(id).parentNode.lastChild.toggle('active');
+                //document.getElementById(id).firstChild.toggle();
+                //line.setVisible(document.getElementById(id).checked);
+                //document.getElementById('option11').checked = document.getElementById(id).checked;
+            } else if (id == "option2") {
+                if (!(document.getElementById("option25").style.height == "1px")) {
+                    document.getElementById("option25").style.visibility = 'hidden';
+                    document.getElementById("option25").style.height = "1px";
+                } else {
+                    document.getElementById("option25").style.visibility = 'visible';
+                    document.getElementById("option25").style.height = document.getElementById("option1").style.height;
+                    //document.getElementById("option1")
+                }
+                //document.getElementById(id).classList.toggle('active');
+                //alert(document.getElementById(id).children.length);
+                //document.getElementById(id).firstChild.toggle();
             }
-        </script>
-    </head>
+
+        }
+        function getStatus() {
+            alert("可點選狀態:" + pTGMarker.getClickable() + "\n顯示狀態:" + pTGMarker.getVisible());
+        }
+        function openInfoWindow() {      //開啟訊息視窗函式
+
+            messageBox.open(pMap);
+
+        }
+
+        function closeInfoWindow() {      //關閉訊息視窗函式
+
+            messageBox.close();
+
+        }
+
+
+        $(document).ready(function () {
+            //以ul li包子選單
+            $('.cart>li>label').click(function (event) {
+                event.preventDefault();
+                $(this).toggleClass('active');
+                $(this).siblings('ul').slideToggle(2000);
+            });
+            $('.cart>li>a').click(function (event) {
+                event.preventDefault();
+                $(this).toggleClass('active');
+                $(this).siblings('ul').slideToggle(2000);
+            });
+            // 將所有子選單隱藏起來
+            $("#mymenu ul li").next("ul").hide();
+
+            // 點擊時展開或收起子選單
+            $("#mymenu ul li").click(function () {
+                $(this).next("ul").toggle('active');
+            });
+
+            // 點擊時展開或收起子選單
+            $("#checkbox ul li").click(function () {
+                $(this).next("ul").toggle('active');
+            });
+
+
+        });
+    </script>
+    <script>
+        import { ref } from 'vue'
+
+        export default {
+            setup() {
+                const toggleStates = ref({ profile: false, media: false });
+
+                const toggleSubMenu = (type) => {
+                    toggleStates.value[type] = !toggleStates.value[type];
+                }
+
+                return {
+                    toggleSubMenu,
+                    toggleStates
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="main.css">
+</head>
 <body style="margin: 0px" onload="InitWnd();">
-    <div id="TGMap" style="width: 640px; height: 480px; border: 1px solid #C0C0C0;">
+    <div id="checkbox" style="float:left; ">
+        <ul class="cart2">
+            <li>
+                <a id="option1" href="#" onclick="visibleMarker(this.id)">選單1</a>
+                <ul id="option15" >
+                    <li><label><input id="option11" name="variety" type="checkbox" onclick="visibleMarker(this.id)" checked="checked" /><span class="round button">三重光纖</span></label></li>
+                </ul>
+            </li>
+            <li>
+                <a id="option2" href="#" onclick="visibleMarker(this.id)">選單2</a>
+                <ul  id="option25">
+                    <li>
+                        <label><input type="checkbox" id="option22" value="option1" checked="checked" onclick="visibleMarker(this.id)"> <span class="round button">抽水站</span> </label>
+                    </li>
+                   
+                </ul>
+            </li>
+        </ul>
     </div>
+    <div id="TGMap" style="width: 640px; height: 480px; border: 1px solid #C0C0C0; margin-left: 310px ">
+    </div>
+    <style>
+        .cart > li > a {
+            border: 1px solid gray;
+            color: gray;
+            font-weight: 600;
+            font-size: 16px;
+            padding: 10px;
+        }
+
+            .cart > li > a:hover, .cart > li > a.active {
+                background: gray;
+                color: #fff;
+            }
+
+        .cart > li > label {
+            border: 1px solid gray;
+            color: gray;
+            font-weight: 600;
+            font-size: 16px;
+            padding: 10px;
+        }
+
+            .cart > li > label:hover, .cart > li > label.active {
+                background: gray;
+                color: #fff;
+            }
+
+        .cart label {
+            display: block;
+            text-decoration: none;
+        }
+
+        .cart ul {
+            display: none;
+        }
+        .cart ul:active {
+            display: 1;
+        }
+            .cart ul li {
+                margin: 10px;
+            }
+
+                .cart ul li label {
+                    color: #000;
+                }
+
+
+        #checkbox input[type="checkbox"] {
+            display: none;
+        }
+
+        #checkbox input:checked + .button {
+            background: #5e7380;
+            color: #fff;
+        }
+
+        #checkbox .button {
+            display: inline-block;
+            margin: 0 5px 10px 0;
+            padding: 5px 10px;
+            background: #f7f7f7;
+            color: #333;
+            cursor: pointer;
+        }
+
+            #checkbox .button:hover {
+                background: #bbb;
+                color: #fff;
+            }
+
+        #checkbox .round {
+            border-radius: 5px;
+        }
+
+        #nav:hover .fas {
+            margin-right: 0em;
+        }
+
+        #nav .li::before {
+            content: "";
+            position: absolute;
+            border-top: 1px dashed #ffffff;
+            left: 10px;
+            right: 10px;
+            top: 0px;
+        }
+        .active {
+            width: 100%;
+            padding: 25px;
+            background-color: coral;
+            color: white;
+            font-size: 25px;
+        }
+    </style>
+
     <br />
-    三重光纖<input id="clickable" type="checkbox" onclick="clcikableMarker()" checked="checked" />
-    抽水站<input id="visible" type="checkbox" onclick="visibleMarker()" checked="checked" /><br />
 </body>
 </html>
